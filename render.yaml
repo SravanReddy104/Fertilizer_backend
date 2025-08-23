@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: fertilizer-backend
+    env: python
+    plan: starter
+    buildCommand: >-
+      PIP_ONLY_BINARY=:all: PIP_DISABLE_PIP_VERSION_CHECK=1 pip install --upgrade pip setuptools wheel &&
+      PIP_ONLY_BINARY=:all: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
