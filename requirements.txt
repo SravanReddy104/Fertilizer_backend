@@ -3,7 +3,7 @@ uvicorn[standard]==0.24.0
 supabase==2.0.2
 python-dotenv==1.0.0
 pydantic==2.7.4
-pydantic-core>=2.14.6,<3.0
+pydantic-core==2.14.6
 pydantic-settings==2.0.3
 typing-extensions==4.12.2
 email-validator==2.1.0.post1
