@@ -55,33 +55,13 @@ def decode_token(token: str) -> TokenData:
 
 # Dependencies
 
-def get_current_user(token: str = Depends(oauth2_scheme)) -> Tuple[int, str]:
-    # returns (user_id, role)
-    td = decode_token(token)
-    if not td.sub:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
-
-    # Check token revocation/blacklist by jti or session
-    if td.jti:
-        with pg_cursor() as cur:
-            cur.execute("SELECT revoked FROM refresh_tokens WHERE jti = %s", (td.jti,))
-            row = cur.fetchone()
-            if row and row[0]:
-                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token revoked")
-
-    # Ensure user exists and active
-    with pg_cursor() as cur:
-        cur.execute("SELECT id, role, is_active FROM users WHERE id = %s", (int(td.sub),))
-        user_row = cur.fetchone()
-        if not user_row:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
-        if not user_row[2]:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User is blocked")
-        return user_row[0], user_row[1]
+def get_current_user() -> Tuple[int, str]:
+    """TEMP: Auth disabled. Allow all requests as an 'admin' user.
+    Returns a dummy identity tuple (user_id, role).
+    """
+    return 0, "admin"
 
 
 def require_admin(identity: Tuple[int, str] = Depends(get_current_user)) -> int:
-    user_id, role = identity
-    if role != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin privileges required")
-    return user_id
+    """TEMP: Auth disabled. Everyone is treated as admin."""
+    return 0
