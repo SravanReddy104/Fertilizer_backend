@@ -177,7 +177,7 @@ async def create_sale(sale: SaleCreate, _: int = Depends(require_admin)):
         raise DatabaseError("Failed to create sale")
 
 @router.put("/{sale_id}/payment")
-async def update_payment(sale_id: int, paid_amount: float, _: int = Depends(require_admin)):
+async def update_payment(sale_id: int, paid_amount: float = Query(...), _: int = Depends(require_admin)):
     """Update payment for a sale"""
     logger.info("PUT /api/sales/%s/payment | paid_amount=%s", sale_id, paid_amount)
     try:

@@ -148,7 +148,7 @@ async def update_debt(debt_id: int, debt: DebtUpdate, _: int = Depends(require_a
         raise DatabaseError("Failed to update debt")
 
 @router.put("/{debt_id}/pay")
-async def pay_debt(debt_id: int, amount: float, _: int = Depends(require_admin)):
+async def pay_debt(debt_id: int, amount: float = Query(...), _: int = Depends(require_admin)):
     """Make a payment towards a debt"""
     logger.info("PUT /api/debts/%s/pay | amount=%s", debt_id, amount)
     try:

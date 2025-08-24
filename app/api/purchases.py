@@ -173,7 +173,7 @@ async def create_purchase(purchase: PurchaseCreate, _: int = Depends(require_adm
         raise DatabaseError("Failed to create purchase")
 
 @router.put("/{purchase_id}/payment")
-async def update_payment(purchase_id: int, paid_amount: float, _: int = Depends(require_admin)):
+async def update_payment(purchase_id: int, paid_amount: float = Query(...), _: int = Depends(require_admin)):
     """Update payment for a purchase"""
     logger.info("PUT /api/purchases/%s/payment | paid_amount=%s", purchase_id, paid_amount)
     try:
